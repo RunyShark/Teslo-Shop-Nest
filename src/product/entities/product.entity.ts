@@ -42,13 +42,27 @@ export class Product {
     type: 'text',
   })
   gender: string;
-  //tags
+
+  @Column({
+    type: 'text',
+    array: true,
+    default: [],
+  })
+  tags: string[];
   //img
   @BeforeInsert()
   checkSlugInsert() {
     if (!this.slug) {
       this.slug = this.title;
     }
+    this.slug = this.slug
+      .toLowerCase()
+      .replaceAll(' ', '_')
+      .replaceAll("'", '');
+  }
+
+  @BeforeInsert()
+  checkSlugUpdate() {
     this.slug = this.slug
       .toLowerCase()
       .replaceAll(' ', '_')
