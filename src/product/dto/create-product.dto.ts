@@ -1,17 +1,19 @@
 import {
+  IsArray,
+  IsIn,
   IsInt,
   IsNumber,
   IsOptional,
   IsPositive,
   IsString,
-  Max,
-  Min,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class CreateProductDto {
   @IsString()
-  @Min(3)
-  @Max(50)
+  @MinLength(3)
+  @MaxLength(50)
   title: string;
 
   @IsNumber()
@@ -21,19 +23,23 @@ export class CreateProductDto {
 
   @IsString()
   @IsOptional()
-  @Min(3)
-  @Max(150)
+  @MinLength(3)
+  @MaxLength(150)
   description?: string;
 
   @IsString()
+  @IsOptional()
   slug: string;
 
-  @IsNumber()
   @IsOptional()
   @IsInt()
   @IsPositive()
   stock?: number;
 
-  @IsString()
+  @IsString({ each: true })
+  @IsArray()
+  size: string[];
+
+  @IsIn(['men', 'women', 'kid', 'unisex'])
   gender: string;
 }
