@@ -24,7 +24,9 @@ export class ProductService {
       await this.productRepository.save(product);
 
       return product;
-    } catch (error) {}
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   async findAll() {
@@ -42,8 +44,11 @@ export class ProductService {
   async remove(id: number) {
     return `This action removes a #${id} product`;
   }
-  private handleExceptions(error: any) {
+
+  private handleDBExceptions(error: any) {
+    //console.log(error);
     if (error.code === '23505') throw new BadRequestException(error.detail);
+    if (error.code === '23502') throw new BadRequestException(error.detail);
 
     this.logger.error(error);
     throw new InternalServerErrorException(
