@@ -20,7 +20,7 @@ export class Product {
     type: 'text',
     nullable: true,
   })
-  descriptop: string;
+  description: string;
 
   @Column({
     type: 'text',
