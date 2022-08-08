@@ -11,7 +11,7 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
-
+import { validate as isUUID } from 'uuid';
 @Injectable()
 export class ProductService {
   private readonly logger = new Logger('ProductService');
@@ -48,10 +48,23 @@ export class ProductService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(term: string) {
+    let product: Product;
     try {
-      const product = await this.productRepository.findOneBy({ id });
+      if (isUUID(term)) {
+        product = await this.productRepository.findOneBy({ id: term });
+      } else {
+        const queryBuilder = this.productRepository.createQueryBuilder();
+        product = await queryBuilder
+          .where(`UPPER(title)=:title or slug=:slug`, {
+            title: term.toUpperCase(),
+            slug: term.toLowerCase(),
+          })
+          .getOne();
+      }
+
       if (!product) throw new NotFoundException(`Product not found`);
+
       return product;
     } catch (error) {
       this.handleDBExceptions(error);
