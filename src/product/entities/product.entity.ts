@@ -1,5 +1,12 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
+import { IsArray, IsOptional } from 'class-validator';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { PoductImage } from './';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn('uuid')
@@ -49,7 +56,14 @@ export class Product {
     default: [],
   })
   tags: string[];
-  //img
+
+  @IsOptional()
+  @IsArray()
+  @OneToMany(() => PoductImage, (poductImage) => poductImage.product, {
+    cascade: true,
+  })
+  image?: PoductImage[];
+
   @BeforeInsert()
   checkSlugInsert() {
     if (!this.slug) {
