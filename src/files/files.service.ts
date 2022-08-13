@@ -1,9 +1,21 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import { join } from 'path';
+import { existsSync } from 'fs';
+
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
 
 @Injectable()
 export class FilesService {
   getStaticProducIgm(imgName: string) {
-    return imgName;
+    const path = join(__dirname, 'src-static-products', imgName);
+
+    // if (!existsSync(path))
+    //   throw new BadRequestException(`No product found with image ${imgName}`);
+
+    return path;
   }
 
   createUploadedFile(file: Express.Multer.File) {

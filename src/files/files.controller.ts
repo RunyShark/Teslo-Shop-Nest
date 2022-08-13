@@ -3,11 +3,13 @@ import {
   Get,
   Param,
   Post,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-
+import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
+
 import { diskStorage } from 'multer';
 
 import { FilesService } from './files.service';
@@ -18,8 +20,13 @@ export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Get('product/:imgName')
-  findOneImg(@Param('imgName') imgName: string) {
-    return this.filesService.getStaticProducIgm(imgName);
+  findOneImg(
+    @Res() res: Response,
+    @Param('imgName')
+    imgName: string,
+  ) {
+    const path = this.filesService.getStaticProducIgm(imgName);
+    res.sendFile(path);
   }
 
   @Post('product')
