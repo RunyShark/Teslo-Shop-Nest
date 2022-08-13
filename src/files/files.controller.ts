@@ -1,6 +1,7 @@
 import {
-  BadGatewayException,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -16,6 +17,11 @@ import { fileFilter, fileNamer } from './helpers';
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
+  @Get('product/:imgName')
+  findOneImg(@Param('imgName') imgName: string) {
+    return this.filesService.getStaticProducIgm(imgName);
+  }
+
   @Post('product')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -28,9 +34,6 @@ export class FilesController {
     }),
   )
   UploadedFile(@UploadedFile() file: Express.Multer.File) {
-    if (!file) {
-      throw new BadGatewayException('Make sure that the file is an image');
-    }
-    return file;
+    return this.filesService.createUploadedFile(file);
   }
 }
