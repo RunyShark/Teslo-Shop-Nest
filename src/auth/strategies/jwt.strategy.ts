@@ -1,16 +1,18 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from '../entities/user.entity';
-import { JwtPayload } from '../interfaces/jwt.interface';
-import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   BadRequestException,
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from '../entities/user.entity';
+import { JwtPayload } from '../interfaces/jwt.interface';
+import { Repository } from 'typeorm';
+
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   logger = new Logger('JwtStrategy');
   constructor(
