@@ -1,27 +1,26 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from '../entities/user.entity';
+import { JwtPayload } from '../interfaces/jwt.interface';
+import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Injectable, Logger } from '@nestjs/common';
+import { AuthService } from '../auth.service';
+import { Logger } from '@nestjs/common';
 import {
   BadRequestException,
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from '../entities/user.entity';
-import { JwtPayload } from '../interfaces/jwt.interface';
-import { Repository } from 'typeorm';
-
-@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  logger = new Logger('JwtStrategy');
+  private readonly logger = new Logger();
   constructor(
     @InjectRepository(User) private readonly userRepositorio: Repository<User>,
 
     configService: ConfigService,
   ) {
     super({
-      secretOrkey: configService.get('JWT_SECRET'),
+      secretOrKey: configService.get('JWT_SECRET'),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
@@ -42,7 +41,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
   }
   private handleJWTExceptions(error: any): never {
-    //console.log(error);
     if (error.response) throw new BadRequestException(error.message);
     if (error.code === '23505') throw new BadRequestException(error.detail);
     if (error.code === '23502') throw new BadRequestException(error.detail);
