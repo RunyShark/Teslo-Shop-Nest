@@ -4,7 +4,7 @@ import { ValidRoles } from 'src/auth/interfaces';
 import { SeedService } from './seed.service';
 
 @Controller('seed')
-@Auth()
+// @Auth()
 export class SeedController {
   constructor(private readonly seedService: SeedService) {}
 
