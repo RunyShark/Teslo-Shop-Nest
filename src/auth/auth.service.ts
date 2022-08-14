@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
   NotAcceptableException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -41,11 +42,16 @@ export class AuthService {
     try {
       const { password, email } = loginUserDto;
 
-      const user = await this.userRepositorio.findOne({ where: { email } });
-      if (!user) throw new NotAcceptableException();
+      const user = await this.userRepositorio.findOne({
+        where: { email },
+        select: { email: true, password: true },
+      });
+
+      if (!user)
+        throw new UnauthorizedException('Credentials are not valid (email)');
 
       if (!compareSync(password, user.password))
-        throw new NotAcceptableException('Contraseña incorrecta');
+        throw new UnauthorizedException('Credentials are not valid (password)');
 
       return user;
     } catch (error) {
