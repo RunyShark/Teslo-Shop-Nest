@@ -7,11 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationDTO } from 'src/common/dtos/pagination.dto';
-import {
-  DataSource,
-  Repository,
-  ReturningStatementNotSupportedError,
-} from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, PoductImage } from './entities';
