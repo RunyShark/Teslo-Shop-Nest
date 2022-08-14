@@ -1,8 +1,10 @@
 import { IsArray, IsOptional } from 'class-validator';
+import { User } from 'src/auth/entities/user.entity';
 import {
   BeforeInsert,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -64,6 +66,9 @@ export class Product {
     eager: true,
   })
   image?: PoductImage[];
+
+  @ManyToOne(() => User, (user) => user.product, { eager: true })
+  user: User;
 
   @BeforeInsert()
   checkSlugInsert() {
