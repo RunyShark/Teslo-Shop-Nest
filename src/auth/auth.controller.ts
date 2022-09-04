@@ -8,6 +8,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto } from './dto';
 import { GetUser, RawHeaders } from './decorators';
@@ -19,6 +20,7 @@ import { ValidRoles } from './interfaces';
 import { Auth } from './decorators/auth.decorator';
 import Succes from 'src/utils/success.dictiionary';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
