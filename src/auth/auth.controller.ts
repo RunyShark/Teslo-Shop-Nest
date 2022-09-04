@@ -5,6 +5,7 @@ import {
   Get,
   UseGuards,
   Headers,
+  Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
@@ -16,13 +17,14 @@ import { UserRoleGuard } from './guards/user-role.guard';
 import { RoleProtected } from './decorators/role-protected.decorator';
 import { ValidRoles } from './interfaces';
 import { Auth } from './decorators/auth.decorator';
+import Succes from 'src/utils/success.dictiionary';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  create(@Body() createUserDto: CreateUserDto) {
+  mcreate(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
 
@@ -55,6 +57,7 @@ export class AuthController {
       headers,
     };
   }
+
   // @SetMetadata('roles', ['admin'])
   @Get('private2')
   @RoleProtected(ValidRoles.user)

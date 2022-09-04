@@ -5,7 +5,7 @@ import { User } from '../entities/user.entity';
 import { JwtPayload } from '../interfaces/jwt.interface';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from '../auth.service';
+
 import { Logger } from '@nestjs/common';
 import {
   BadRequestException,

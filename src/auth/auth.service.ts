@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  Res,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,7 +16,8 @@ import { hashSync, compareSync } from 'bcryptjs';
 
 import { User } from './entities/user.entity';
 import { JwtPayload } from './interfaces/jwt.interface';
-
+import Succes from 'src/utils/success.dictiionary';
+import { Response } from 'express';
 @Injectable()
 export class AuthService {
   private readonly logger = new Logger('AuthService');
@@ -83,11 +85,11 @@ export class AuthService {
 
   private handleDBExceptions(error: any): never {
     //console.log(error);
+    this.logger.error(error);
     if (error.response) throw new BadRequestException(error.message);
     if (error.code === '23505') throw new BadRequestException(error.detail);
     if (error.code === '23502') throw new BadRequestException(error.detail);
 
-    this.logger.error(error);
     throw new InternalServerErrorException(
       'Unexpected error, check server logs',
     );
